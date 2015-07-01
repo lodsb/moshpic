@@ -12,7 +12,9 @@ Encode [JSON](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/
 
 ### functions
 - encode(canvasElement, string, titleMessage) generates a picture with the info in string (e.g. stringified JSON). The titleMessage is rendered into the center of the pic.
-- decode(canvasElement, imageElement), return the data.
+The data is straightforwardly encoded into the rectangles using rgb values (alpha doesnt work because of the browser's compositing, see [this](https://stackoverflow.com/questions/4309364/why-does-html-canvas-getimagedata-not-return-the-exact-same-values-that-were-j)). The number and size of the rectangles
+are adjusted according to the amount of data and canvas size.
+- decode(canvasElement, imageElement), return the data. The decoder currently shows debug output in the canvas to show which data has been "tracked". It's primitive, really!
 
 ### example
 ```javascript
