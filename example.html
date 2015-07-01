@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+  </head>
+  <body>
+    <div>
+      <h1>Dencoding...</h1><br>
+      QR cant be used properly. too much info, wont scan anyways, so own tool. Maybe QR can be embedding this shiz, yo - lateron.
+    </div>
+          <div>
+            <div>
+              <h2>original content</h2><br>
+              <div id="decIn"></div>
+            </div>
+            <div>
+              <h2>encoded content (compress)</h2><br>
+              <div id="encOut">
+              </div>
+              <h2>generated image</h2><br>
+              <canvas id="canvasEncoder" width="400" height="400"></canvas>
+                <div id="decInfo">
+                </div>
+            </div>
+            <div id="test">
+            </div>
+            <div>
+              <h2>as img</h2><br>
+              <img id="image">
+            </div>
+            <div>
+              <h2>decoding</h2><br>
+              <canvas id="canvasDecoder" width="400" height="400"></canvas>
+            </div>
+            <div>
+              <h2>decoded content</h2><br>
+              <div id="decOut">
+              </div>
+            </div>
+          </div>
+    <div id="imgOut">
+    </div>
+
+    <script src="lz-string.js"></script>
+    <script src="moshpic.js"></script>
+    <script src="underscore.js"></script>
+
+    <script>
+
+
+    var myJson = {
+      "apiVersion": "0.1",
+      "title": "LAZERS!!!!",
+      "artwork" : "http://lorempixel.com/1000/1000",
+      "date" : "2015-02-01",
+      "publisher" : "lodsb.org",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "media": [{
+        "title": "Ukusadfsdsdaflele Song",
+        "artist": "sadfsadfsdasda",
+        "uri":"http://media.laridae.at/relxcvbeases/laridae050/20-tek4.mp3",
+        "length": "04:22","type": "audio",
+        "license" : "CC-SA-NC-3.0",
+        "supportUri" : "http://xxx.org"
+      },{
+        "title": "I Dreameasdfsadsfadd a Dream",
+        "artist": "Wing",
+        "uri":"http://media.laridae.at/relexcvbases/laridae050/02-soap.mp3",
+        "length": "03:21","type": "audio",
+        "license" : "CC-SA-NC-3.0",
+        "supportUri" : "http://xxx.org"
+      }
+      ,{
+        "title": "Should be dead",
+        "artist": "Wing",
+        "uri":"asd",
+        "length": "03:21","type": "audio",
+        "license" : "CC-SA-NC-3.0",
+        "supportUri" : "http://xxx.org"
+      },{
+        "title": "VIDEO",
+        "artist": "Wing",
+        "uri":"http://vjs.zencdn.net/v/oceans.mp4",
+        "length": "03:21","type": "video",
+        "license" : "CC-SA-NC-3.0",
+        "supportUri" : "http://xxx.org"
+      },{
+        "title": "Ukusadfsdsdaflele Song",
+        "artist": "sadfsadfsdasda",
+        "uri":"http://media.layxcvyxcvyxcvridae.at/relxcvbeyxcvyxcvases/laridae050/20-tek4.mp3",
+        "length": "04:22","type": "audio",
+        "license" : "CC-SA-NC-3.0",
+        "supportUri" : "http://xxx.org"
+      },{
+        "title": "I Dreameasdfasdfasdfsadsfadd a Dream",
+        "artist": "Wing",
+        "uri":"http://medasdfasdfia.laridae.at/relexcvbasdfasdfases/laridae050/02-soap.mp3",
+        "length": "03:21","type": "audio",
+        "license" : "CC-SA-NC-3.0",
+        "supportUri" : "http://xxx.org"
+      }
+      ,{
+        "title": "Shoulyxcvyxcvd be dead",
+        "artist": "Wiyxcvng",
+        "uri":"asd",
+        "length": "03:21","type": "audio",
+        "license" : "CC-SA-NC-3.0",
+        "supportUri" : "http://xxyxcvyxcvyxcvyxcvx.org"
+      },{
+        "title": "VIDEO",
+        "artist": "Wi234234ng",
+        "uri":"http://vjs.zencdn.net/v/oceans.mp4",
+        "length": "03:21","type": "video",
+        "license" : "CC-SA-NC-3.0",
+        "supportUri" : "http://xxyxcvyxcvyxcvyxcvx.org"
+      }
+      ,{
+        "title": "VIasasdasdadsasdDEO",
+        "artist": "Wi234234ng",
+        "uri":"http://vasasdasdasdasdjs.zencdn.net/v/oceans.mp4",
+        "length": "03:21","type": "video",
+        "license" : "CC-SA-NC-3.0",
+        "supportUri" : "http://xxyxcvyasdasdxcvyxcvyxcvx.org"
+      },{
+        "title": "VIDEO",
+        "artist": "Wi234234ng",
+        "uri":"http://asasdadsasdsadvjs.zencdn.net/v/oceans.mp4",
+        "length": "03:21","type": "video",
+        "license" : "CC-SA-NC-3.0",
+        "supportUri" : "http://xxyxcvyxcvyxcvyxcvx.org"
+      }
+      ]
+        }
+
+    var myJsonString = JSON.stringify(myJson);//"TESTlök dlfkd lfskdö fsdf 548465 4sdf84 r23 r dsfösdfä#öüö #sädfödäöfädöfädsäödfüsdfö34ölksdöfo";//JSON.stringify(myJson);
+
+    var inputDiv = document.getElementById("decIn");
+    inputDiv.innerHTML = "<b style=\"color: violet\">" + myJsonString + "</b>";
+
+    var compressedJsonString = LZString.compress(myJsonString);
+    var encOutDiv = document.getElementById("encOut");
+    encOutDiv.innerHTML = "<b style=\"color: green\">" + compressedJsonString + "</b>";
+
+    // add decoder version pixels and image end points so it can be put into QR later!!
+    // "header" with metadata
+    var canvasEncoder = document.getElementById("canvasEncoder");
+
+    var prox = moshpic.encode(canvasEncoder, myJsonString, "supermeng");
+
+    var img = document.getElementById("image");
+    img.src = canvasEncoder.toDataURL("image/png", 1.0);
+
+    var canvasDecoder = document.getElementById("canvasDecoder");
+    var decodedData = moshpic.decode(canvasDecoder, image);
+
+    var decOutCompressDiv = document.getElementById("decOut");
+    decOutCompressDiv.innerHTML = "<b style=\"color: red\">" + decodedData + "</b>"
+
+    </script>
+
+
+  </body>
+</html>
