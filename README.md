@@ -4,7 +4,7 @@ Encode [JSON](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/
 ![Encoded JSON](https://raw.githubusercontent.com/lodsb/moshpic/master/encodedpic.png "Encoded Json + title set to supermeng")
 
 
-[LIVE](http://playground.lodsb.org/moshpic/example.html) check the code in the inspector.
+[LIVE](http://playground.lodsb.org/moshpic/example.html) - check the code in the browser's inspector.
 
 ## use
 - needs canvas objects to do the work (can be hidden)
